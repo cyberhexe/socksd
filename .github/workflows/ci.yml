@@ -16,6 +16,7 @@ jobs:
   publish-deb-package:
       runs-on: ubuntu-latest
       steps:
+        - uses: actions/checkout@master
         - name: Build project
           run: >-
             sh build-deb.sh ${{ env.VERSION }}
