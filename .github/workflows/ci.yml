@@ -15,7 +15,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  publish-test-pypi:
+  publish-deb-package:
       runs-on: ubuntu-latest
       if: github.ref == 'refs/heads/develop'
       steps:
