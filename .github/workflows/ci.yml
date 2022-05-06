@@ -16,7 +16,13 @@ jobs:
   publish-deb-package:
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@master
-        - name: Build project
-          run: >-
-            sh build-deb.sh ${{ env.VERSION }}
+        - uses: actions/checkout@v2
+        - run: sh build-deb.sh ${{ env.VERSION }}
+        - uses: actions/upload-artifact@v3
+          with:
+            name: socksd
+            path: deb/socksd_${{ env.VERSION }}.deb
+#      steps:
+#        - name: Build project
+#          run: >-
+#            sh build-deb.sh ${{ env.VERSION }}
