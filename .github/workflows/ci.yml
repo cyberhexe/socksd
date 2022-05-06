@@ -11,8 +11,6 @@ on:
 
 env:
   VERSION: 0.1
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   publish-deb-package:
