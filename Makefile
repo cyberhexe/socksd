@@ -4,8 +4,10 @@
 prefix = /usr/local
 bindir = $(prefix)/bin
 
-PROG = microsocks
-SRCS =  sockssrv.c server.c sblist.c sblist_delete.c
+version = $(cat deb/DEBIAN/control |grep Version |cut -d" " -f2)
+
+PROG = socksd
+SRCS = src/sockssrv.c src/server.c src/sblist.c src/sblist_delete.c
 OBJS = $(SRCS:.c=.o)
 
 LIBS = -lpthread
@@ -23,6 +25,9 @@ install: $(PROG)
 clean:
 	rm -f $(PROG)
 	rm -f $(OBJS)
+
+uninstall: $(PROG)
+	rm -rf $(bindir)/$(PROG)
 
 %.o: %.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(PIC) -c -o $@ $<
