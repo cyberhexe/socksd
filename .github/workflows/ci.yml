@@ -15,7 +15,6 @@ env:
 jobs:
   publish-deb-package:
       runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/develop'
       steps:
         - name: Build project
           run: >-
