@@ -22,8 +22,8 @@ jobs:
         - uses: actions/upload-artifact@v3
           with:
             name: socksd
-            path: deb/socksd_${{ VERSION }}.deb
+            path: deb/socksd_${{ env.VERSION }}.deb
         - name: Release the Debian package
           uses: softprops/action-gh-release@v1
           with:
-            files: deb/socksd_${{ VERSION }}.deb
+            files: deb/socksd_${{ env.VERSION }}.deb
