@@ -36,7 +36,8 @@ jobs:
         id: version
 
       - name: Build the Debian package
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+
         env:
           VERSION: ${{ steps.version.outputs.TAG_NAME }}
         run: |
