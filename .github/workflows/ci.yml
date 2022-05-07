@@ -34,5 +34,5 @@ jobs:
       - name: Retrieve version and build the package
         run: |
           echo "::set-output name=TAG_NAME::$(git pull && git tag |tail -1)"
-          sh build-deb.sh "$VERSION"
+          sh build-deb.sh "${{ steps.version.output.TAG_NAME }}"
         id: version
