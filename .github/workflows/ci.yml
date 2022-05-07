@@ -1,9 +1,4 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Create and publish a Debian package
+name: Autoincrement the Git tag and publish a Debian package
 
 on:
   push:
@@ -34,18 +29,17 @@ jobs:
     needs: bump-tag
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
-      - uses: actions/checkout@v2
       - run: sh build-deb.sh ${{ steps.get_version.outputs.VERSION }}
       - uses: actions/upload-artifact@v3
         with:
           name: socksd
           path: deb/socksd_${{ steps.get_version.outputs.VERSION }}.deb
-      - name: Release the Debian package
+      - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          #            files: deb/socksd_${{ env.VERSION }}.deb
           files: deb/socksd_${{ steps.get_version.outputs.VERSION }}.deb
