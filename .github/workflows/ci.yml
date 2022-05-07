@@ -31,13 +31,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Retrieve version
-        run: |
+      - run: |
           echo "::set-output name=TAG_NAME::${{ github.ref_name }}"
-        id: version
+      - id: version
 
       - name: Build the Debian package
       - uses: actions/checkout@v2
-
         env:
           VERSION: ${{ steps.version.outputs.TAG_NAME }}
         run: |
