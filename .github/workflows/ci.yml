@@ -19,13 +19,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create an incremental release
-        uses: aurestic/incrementarl-create-release@master
+      - uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
+
+      - uses: actions-ecosystem/action-bump-semver@v1
+        id: bump-semver
         with:
-          message: Bump version
-          prev_tag: 'v'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          current_version: ${{ steps.get-latest-tag.outputs.tag }}
+          level: minor
+
+      - uses: actions-ecosystem/action-push-tag@v1
+        with:
+          tag: ${{ steps.bump-semver.outputs.new_version }}
+          message: '${{ steps.bump-semver.outputs.new_version }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
+#      - uses: actions/checkout@v2
+#
+#      - name: Create an incremental release
+#        uses: aurestic/incrementarl-create-release@master
+#        with:
+#          message: Bump version
+#          prev_tag: 'v'
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish-deb-package:
     needs: bump-tag
