@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]; then
     echo "Usage: $0 <version> [binary-file]"
-    exit 0
+    exit 1
 fi
 
 binary_file="$2"

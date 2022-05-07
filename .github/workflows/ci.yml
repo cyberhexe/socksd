@@ -36,8 +36,9 @@ jobs:
 
       - uses: actions/checkout@v2
       - name: Build the Debian package
+        env:
+          VERSION: ${{ steps.version.outputs.TAG_NAME }}
         run: |
-          VERSION=$(git tag | tail -1)
           sh build-deb.sh "$VERSION"
 
       - name: Create Release
