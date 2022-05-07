@@ -25,30 +25,40 @@ jobs:
           tag: ${{ steps.bump-semver.outputs.new_version }}
           message: '${{ steps.bump-semver.outputs.new_version }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
 
+
   publish-deb-package:
     needs: bump-tag
     runs-on: ubuntu-latest
     steps:
-      - name: Retrieve version
-        run: |
-          echo "::set-output name=TAG_NAME::$(git tag | tail -1)"
-        id: version
+#      - name: Retrieve version
+#        run: |
+#          echo "::set-output name=TAG_NAME::$(git tag | tail -1)"
+#        id: version
+#
+#      - uses: actions/checkout@v2
+#      - name: Build the Debian package
+#        env:
+#          VERSION: ${{ steps.version.outputs.TAG_NAME }}
+#        run: |
+#          sh build-deb.sh "$VERSION"
+#
+#      - name: Create Release
+#        id: create_release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ steps.version.outputs.TAG_NAME }}
 
-      - uses: actions/checkout@v2
-      - name: Build the Debian package
-        env:
-          VERSION: ${{ steps.version.outputs.TAG_NAME }}
-        run: |
-          sh build-deb.sh "$VERSION"
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload the artifact
+      - uses: actions/upload-artifact@v2
         with:
-          tag_name: ${{ steps.version.outputs.TAG_NAME }}
-
+          name: socksd
+          path: deb/socksd_${{ github.ref_name }}.deb
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: deb/socksd_${{ github.ref_name }}.deb
 
 
 #      - name: Upload the artifact
