@@ -11,6 +11,8 @@ on:
 
 env:
   VERSION: 0.1
+  ARTIFACT_NAME: deb/socksd_${{ env.VERSION }}.deb
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   publish-deb-package:
@@ -21,7 +23,11 @@ jobs:
         - uses: actions/upload-artifact@v3
           with:
             name: socksd
-            path: deb/socksd_${{ env.VERSION }}.deb
+            path: ${{ ARTIFACT_NAME }}
+      - name: Release the Debian package
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ ARTIFACT_NAME }}
 #      steps:
 #        - name: Build project
 #          run: >-
