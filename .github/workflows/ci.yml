@@ -30,43 +30,14 @@ jobs:
     needs: bump-tag
     runs-on: ubuntu-latest
     steps:
-#      - name: Retrieve version
-#        run: |
-#          echo "::set-output name=TAG_NAME::$(git tag | tail -1)"
-#        id: version
+      - name: Retrieve version
+        run: |
+          echo "::set-output name=TAG_NAME::$(git tag | tail -1)"
+        id: version
 #
-#      - uses: actions/checkout@v2
-#      - name: Build the Debian package
-#        env:
-#          VERSION: ${{ steps.version.outputs.TAG_NAME }}
-#        run: |
-#          sh build-deb.sh "$VERSION"
-#
-#      - name: Create Release
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: ${{ steps.version.outputs.TAG_NAME }}
-
-      - name: Upload the artifact
-      - uses: actions/upload-artifact@v3
-        with:
-          name: socksd
-          path: deb/socksd_${{ github.ref_name }}.deb
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: deb/socksd_${{ github.ref_name }}.deb
-
-
-#      - name: Upload the artifact
-#      - uses: actions/upload-artifact@v3
-#        with:
-#          name: socksd
-#          path: deb/socksd_${{ steps.get_version.outputs.VERSION }}.deb
-#      - name: Release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          files: deb/socksd_${{ steps.get_version.outputs.VERSION }}.deb
+      - uses: actions/checkout@v2
+      - name: Build the Debian package
+        env:
+          VERSION: ${{ steps.version.outputs.TAG_NAME }}
+        run: |
+          sh build-deb.sh "$VERSION"
