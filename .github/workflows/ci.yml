@@ -24,11 +24,7 @@ jobs:
           with:
             name: socksd
             path: ${{ ARTIFACT_NAME }}
-      - name: Release the Debian package
-        uses: softprops/action-gh-release@v1
-        with:
-          files: ${{ ARTIFACT_NAME }}
-#      steps:
-#        - name: Build project
-#          run: >-
-#            sh build-deb.sh ${{ env.VERSION }}
+        - name: Release the Debian package
+          uses: softprops/action-gh-release@v1
+          with:
+            files: ${{ ARTIFACT_NAME }}
