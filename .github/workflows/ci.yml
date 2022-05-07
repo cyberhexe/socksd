@@ -51,7 +51,7 @@ jobs:
 #          tag_name: ${{ steps.version.outputs.TAG_NAME }}
 
       - name: Upload the artifact
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: socksd
           path: deb/socksd_${{ github.ref_name }}.deb
