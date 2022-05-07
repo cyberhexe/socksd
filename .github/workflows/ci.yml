@@ -10,7 +10,6 @@ on:
     branches: ['master']
 
 env:
-  VERSION: 0.1
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
@@ -23,10 +22,8 @@ jobs:
       - name: Create an incremental release
         uses: aurestic/incrementarl-create-release@master
         with:
-          flag_branch: true
           message: Bump version
           prev_tag: 'v'
-          update_odoo_module_version: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -34,12 +31,13 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2
-        - run: sh build-deb.sh ${{ env.VERSION }}
+        - run: sh build-deb.sh ${{ github.ref_name }}
         - uses: actions/upload-artifact@v3
           with:
             name: socksd
-            path: deb/socksd_${{ env.VERSION }}.deb
+            path: deb/socksd_${{ github.ref_name }}.deb
         - name: Release the Debian package
           uses: softprops/action-gh-release@v1
           with:
-            files: deb/socksd_${{ env.VERSION }}.deb
+#            files: deb/socksd_${{ env.VERSION }}.deb
+            files: deb/socksd_${{ github.ref_name }}.deb
