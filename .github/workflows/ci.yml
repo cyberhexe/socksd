@@ -29,17 +29,33 @@ jobs:
     needs: bump-tag
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::$(git tag --sort=committerdate | tail -1)
+      - name: Retrieve version
+        run: |
+          echo "::set-output name=TAG_NAME::$(git tag | tail -1)')"
+        id: version
 
-      - run: sh build-deb.sh ${{ steps.get_version.outputs.VERSION }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/checkout@v2
+      - name: Build the Debian package
+        run: |
+          VERSION=$(git tag | tail -1)
+          sh build-deb.sh "$VERSION"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.token }}
         with:
-          name: socksd
-          path: deb/socksd_${{ steps.get_version.outputs.VERSION }}.deb
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: deb/socksd_${{ steps.get_version.outputs.VERSION }}.deb
+          tag_name: ${{ steps.version.outputs.TAG_NAME }}
+
+
+
+#      - name: Upload the artifact
+#      - uses: actions/upload-artifact@v3
+#        with:
+#          name: socksd
+#          path: deb/socksd_${{ steps.get_version.outputs.VERSION }}.deb
+#      - name: Release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: deb/socksd_${{ steps.get_version.outputs.VERSION }}.deb
