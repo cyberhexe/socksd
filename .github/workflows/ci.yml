@@ -7,7 +7,7 @@ name: Create and publish a Debian package
 
 on:
   push:
-    branches: ['master']
+    branches: [ 'master' ]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -28,16 +28,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish-deb-package:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - run: sh build-deb.sh ${{ github.ref_name }}
-        - uses: actions/upload-artifact@v3
-          with:
-            name: socksd
-            path: deb/socksd_${{ github.ref_name }}.deb
-        - name: Release the Debian package
-          uses: softprops/action-gh-release@v1
-          with:
-#            files: deb/socksd_${{ env.VERSION }}.deb
-            files: deb/socksd_${{ github.ref_name }}.deb
+    needs: bump-tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: sh build-deb.sh ${{ github.ref_name }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: socksd
+          path: deb/socksd_${{ github.ref_name }}.deb
+      - name: Release the Debian package
+        uses: softprops/action-gh-release@v1
+        with:
+          #            files: deb/socksd_${{ env.VERSION }}.deb
+          files: deb/socksd_${{ github.ref_name }}.deb
