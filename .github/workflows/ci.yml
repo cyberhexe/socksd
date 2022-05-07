@@ -11,7 +11,7 @@ on:
 
 env:
   VERSION: 0.1
-  ARTIFACT_NAME: deb/socksd_${{ env.VERSION }}.deb
+  ARTIFACT_NAME: deb/socksd_${{ VERSION }}.deb
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
