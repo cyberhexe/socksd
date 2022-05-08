@@ -25,14 +25,10 @@ jobs:
           tag: ${{ steps.bump-semver.outputs.new_version }}
           message: '${{ steps.bump-semver.outputs.new_version }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
 
-
-  publish-deb-package:
-    needs: bump-tag
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/checkout@v2
-      - name: Retrieve version and build the package
-        run: |
-          export VERSION=$(git tag |tail -1)
-          sh build-deb.sh "$VERSION"
-        id: version
+      - run: sh build-deb.sh ${{ steps.bump-semver.outputs.new_version }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: socksd
+          path: deb/socksd_${{ steps.bump-semver.outputs.new_version }}.deb
+
