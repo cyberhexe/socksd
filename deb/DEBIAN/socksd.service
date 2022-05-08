@@ -11,7 +11,7 @@ socksd()
             socksd
             ;;
         stop|restart|reload|force-reload)
-	    killall socksd
+	    pkill socksd
 	    socksd
             ;;
         *)
