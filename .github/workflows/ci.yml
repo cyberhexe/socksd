@@ -37,7 +37,7 @@ jobs:
           name: socksd
           path: deb/socksd_${{ steps.bump-semver.outputs.new_version }}.deb
 
-    - uses: ncipollo/release-action@v1
-      with:
-        artifacts: "deb/socksd_${{ steps.bump-semver.outputs.new_version }}.deb"
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "deb/socksd_${{ steps.bump-semver.outputs.new_version }}.deb"
+          token: ${{ secrets.GITHUB_TOKEN }}
