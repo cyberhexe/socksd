@@ -355,7 +355,7 @@ static int usage(void) {
 	dprintf(2,
 		"MicroSocks SOCKS5 Server\n"
 		"------------------------\n"
-		"usage: microsocks -1 -b -i listenip -p port -u user -P password\n"
+		"usage: microsocks -1 -b -i listenip -p port -u user -P password -c configfile\n"
 		"all arguments are optional.\n"
 		"by default listenip is 0.0.0.0 and port 1080.\n\n"
 		"option -b forces outgoing connections to be bound to the ip specified with -i\n"
@@ -375,11 +375,33 @@ static void zero_arg(char *s) {
 	for(i=0;i<l;i++) s[i] = 0;
 }
 
+void read_config_file(char *config_file, char *listenip, int *port) {
+    *listenip = "127.0.0.1";
+    *port = 8888;
+//    char line[256];
+//    int linenum=0;
+//    while(fgets(line, 256, conf_file) != NULL)
+//    {
+//            char ip[256], mac[256];
+//
+//            linenum++;
+//            if(line[0] == '#') continue;
+//
+//            if(sscanf(line, "%s %s", ip, mac) != 2)
+//            {
+//                    fprintf(stderr, "Syntax error, line %d\n", linenum);
+//                    continue;
+//            }
+//
+//            printf("Line %d:  IP %s MAC %s\n", linenum, ip, mac);
+//    }
+}
+
 int main(int argc, char** argv) {
 	int c;
-	const char *listenip = "0.0.0.0";
+	char *listenip = "0.0.0.0";
 	unsigned port = 1080;
-	while((c = getopt(argc, argv, ":1bi:p:u:P:")) != -1) {
+	while((c = getopt(argc, argv, ":1bic:p:u:P:")) != -1) {
 		switch(c) {
 			case '1':
 				auth_ips = sblist_new(sizeof(union sockaddr_union), 8);
@@ -401,12 +423,17 @@ int main(int argc, char** argv) {
 			case 'p':
 				port = atoi(optarg);
 				break;
+			case 'c':
+			    read_config_file(optarg, listenip, port);
+			    break;
 			case ':':
 				dprintf(2, "error: option -%c requires an operand\n", optopt);
 			case '?':
 				return usage();
 		}
 	}
+	dprintf(1, "%s\n", listenip);
+	dprintf(1, "%d\n", port);
 	if((auth_user && !auth_pass) || (!auth_user && auth_pass)) {
 		dprintf(2, "error: user and pass must be used together\n");
 		return 1;
