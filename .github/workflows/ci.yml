@@ -12,6 +12,7 @@ jobs:
   upload-artifact:
     runs-on: ubuntu-latest
     steps:
+      ### auto update the Git tag
       - uses: actions/checkout@v2
       - uses: actions-ecosystem/action-get-latest-tag@v1
         id: get-latest-tag
@@ -25,6 +26,7 @@ jobs:
           tag: ${{ steps.bump-semver.outputs.new_version }}
           message: '${{ steps.bump-semver.outputs.new_version }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'
 
+     ### build the Debian package
       - uses: actions/checkout@v2
       - run: sh build-deb.sh ${{ steps.bump-semver.outputs.new_version }}
       - uses: actions/upload-artifact@v3
@@ -32,3 +34,9 @@ jobs:
           name: socksd
           path: deb/socksd_${{ steps.bump-semver.outputs.new_version }}.deb
 
+    ### release the package
+    ### https://github.com/marketplace/actions/create-release
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "deb/socksd_${{ steps.bump-semver.outputs.new_version }}.deb"
+        token: ${{ secrets.GITHUB_TOKEN }}
