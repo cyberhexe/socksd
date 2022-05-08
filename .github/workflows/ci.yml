@@ -8,9 +8,9 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
-### auto update the Git tag
-### build the Debian package
-### release the package
+### 1 - auto update the Git tag
+### 2 - build the Debian package
+### 3 - release the package
 ### https://github.com/marketplace/actions/create-release
 
 jobs:
