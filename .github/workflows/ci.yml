@@ -41,3 +41,4 @@ jobs:
         with:
           artifacts: "deb/socksd_${{ steps.bump-semver.outputs.new_version }}.deb"
           token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.bump-semver.outputs.new_version }}
